@@ -1,10 +1,10 @@
 import React from "react";
 import { useFetch } from "./CustomHook/useFetch";
-import Login from "./Components/login";
+import Login from "./Components/Login/login";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Error from "./Components/error";
-import ProtectedRoute from "./Components/protectedRoute";
-import Dashboard from "./Components/dashboard";
+import Error from "./Components/ErrorPage/error";
+import ProtectedRoute from "./Protected-Routes/protectedRoute";
+import Dashboard from "./Components/Dashboard/dashboard";
 const url =
   "https://api.spoonacular.com/recipes/random?apiKey=f901b8871ffc4194845cf8e20a40b7b0";
 
@@ -12,7 +12,6 @@ const isAuth = localStorage.getItem("logged-in-user") === null ? false : true;
 
 const App = () => {
   const { loading, products } = useFetch(url);
-
   return (
     <>
       <Router>
@@ -31,7 +30,6 @@ const App = () => {
               />
             }
           >
-            {console.log("Hiiii")}
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>
           <Route path="*" element={<Error />} />

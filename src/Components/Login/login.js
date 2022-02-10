@@ -1,30 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Image from "./dashboardRandomImage";
+import Image from "../Dashboard-Image/dashboardRandomImage";
 
 const Login = ({ loading, products }) => {
   const [person, setPerson] = useState({ name: "", email: "", password: "" });
   let navigate = useNavigate();
 
   function ValidateEmail(mail) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-      return true;
-    }
-    return false;
+    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail);
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const validate = (person) => {
     if (person.name && person.email && person.password) {
       if (!/[^a-zA-Z]/.test(person.name)) {
         if (ValidateEmail(person.email)) {
           if (person.password.length >= 8) {
-            const newPerson = {
-              ...person,
-              id: new Date().getTime().toString(),
-            };
-            localStorage.setItem("logged-in-user", JSON.stringify(newPerson));
-            setPerson({ name: "", email: "", password: "" });
+            return true;
           } else {
             alert("Password must contains atleast 8 characters");
           }
@@ -37,10 +28,23 @@ const Login = ({ loading, products }) => {
     } else {
       alert("Form Values Must Not Be Empty");
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate(person)) {
+      const newPerson = {
+        ...person,
+        id: new Date().getTime().toString(),
+      };
+      localStorage.setItem("logged-in-user", JSON.stringify(newPerson));
+      setPerson({ name: "", email: "", password: "" });
+    }
     if (localStorage.getItem("logged-in-user")) {
       navigate("/dashboard");
     }
   };
+
   const handleChange = (e) => {
     const property = e.target.name;
     const value = e.target.value;

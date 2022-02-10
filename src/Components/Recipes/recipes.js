@@ -1,5 +1,5 @@
 import React from "react";
-import { useFetch } from "../CustomHook/useFetch";
+import { useFetch } from "../../CustomHook/useFetch";
 const Recipes = () => {
   const { query, number, intolerences } = JSON.parse(
     localStorage.getItem("filter")

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Recipes from "./recipes";
+import Recipes from "../Recipes/recipes";
 
 const Dashboard = () => {
   const [productFilter, setProductFilter] = useState({
@@ -8,10 +8,10 @@ const Dashboard = () => {
     number: "",
     intolerences: [],
   });
-  let person = JSON.parse(localStorage.getItem("logged-in-user"));
-  const handleSubmit = (e) => {
-    e.preventDefault();
 
+  let person = JSON.parse(localStorage.getItem("logged-in-user"));
+
+  const validate = (productFilter) => {
     if (
       productFilter.query &&
       productFilter.number &&
@@ -19,12 +19,7 @@ const Dashboard = () => {
     ) {
       if (!/[^a-zA-Z]/.test(productFilter.query)) {
         if (/[^a-zA-Z]/.test(productFilter.number)) {
-          localStorage.setItem("filter", JSON.stringify(productFilter));
-          setProductFilter({
-            ...productFilter,
-            query: "",
-            number: "",
-          });
+          return true;
         } else {
           alert(
             "Number Field Should Not Contain Alphabets Or Any Other Special Characters"
@@ -41,6 +36,18 @@ const Dashboard = () => {
         number: "",
       });
       alert("Fields Must Not Be Empty");
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate(productFilter)) {
+      localStorage.setItem("filter", JSON.stringify(productFilter));
+      setProductFilter({
+        ...productFilter,
+        query: "",
+        number: "",
+      });
     }
   };
 
@@ -64,6 +71,7 @@ const Dashboard = () => {
       setProductFilter({ ...productFilter, [property]: value });
     }
   };
+
   const logoutHandler = () => {
     localStorage.removeItem("logged-in-user");
     localStorage.removeItem("filter");

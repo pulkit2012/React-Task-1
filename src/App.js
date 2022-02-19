@@ -5,30 +5,19 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Error from "./Components/ErrorPage/error";
 import ProtectedRoute from "./Protected-Routes/protectedRoute";
 import Dashboard from "./Components/Dashboard/dashboard";
-const url =
-  "https://api.spoonacular.com/recipes/random?apiKey=f901b8871ffc4194845cf8e20a40b7b0";
-
-const isAuth = localStorage.getItem("logged-in-user") === null ? false : true;
-
+const url = `https://api.spoonacular.com/recipes/random?apiKey=${process.env.REACT_APP_API_KEY}`;
 const App = () => {
   const { loading, products } = useFetch(url);
   return (
     <>
       <Router>
         <Routes>
-          {/* <Route path="/check" element={<Check />} /> */}
           <Route
             path="/"
             element={<Login loading={loading} products={products} />}
           />
           <Route
-            element={
-              <ProtectedRoute
-                isAuth={isAuth}
-                loading={loading}
-                products={products}
-              />
-            }
+            element={<ProtectedRoute loading={loading} products={products} />}
           >
             <Route path="/dashboard" element={<Dashboard />} />
           </Route>

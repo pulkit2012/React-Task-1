@@ -1,34 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Image from "../Dashboard-Image/dashboardRandomImage";
-
+import validate from "../../Form-Validation/Validate-Login";
 const Login = ({ loading, products }) => {
   const [person, setPerson] = useState({ name: "", email: "", password: "" });
   let navigate = useNavigate();
-
-  function ValidateEmail(mail) {
-    return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail);
-  }
-
-  const validate = (person) => {
-    if (person.name && person.email && person.password) {
-      if (!/[^a-zA-Z]/.test(person.name)) {
-        if (ValidateEmail(person.email)) {
-          if (person.password.length >= 8) {
-            return true;
-          } else {
-            alert("Password must contains atleast 8 characters");
-          }
-        } else {
-          alert("Enter Valid Email Address");
-        }
-      } else {
-        alert("Your name should not contains numerical values");
-      }
-    } else {
-      alert("Form Values Must Not Be Empty");
-    }
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -39,8 +15,6 @@ const Login = ({ loading, products }) => {
       };
       localStorage.setItem("logged-in-user", JSON.stringify(newPerson));
       setPerson({ name: "", email: "", password: "" });
-    }
-    if (localStorage.getItem("logged-in-user")) {
       navigate("/dashboard");
     }
   };

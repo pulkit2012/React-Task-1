@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Recipes from "../Recipes/recipes";
+import validate from "../../Form-Validation/Dashboard-Validate";
 
 const Dashboard = () => {
   const [productFilter, setProductFilter] = useState({
@@ -11,38 +12,17 @@ const Dashboard = () => {
 
   let person = JSON.parse(localStorage.getItem("logged-in-user"));
 
-  const validate = (productFilter) => {
-    if (
-      productFilter.query &&
-      productFilter.number &&
-      productFilter.intolerences
-    ) {
-      if (!/[^a-zA-Z]/.test(productFilter.query)) {
-        if (/[^a-zA-Z]/.test(productFilter.number)) {
-          return true;
-        } else {
-          alert(
-            "Number Field Should Not Contain Alphabets Or Any Other Special Characters"
-          );
-        }
-      } else {
-        alert("Query Fiels Should Not Contain Numerical Values");
-      }
-    } else {
-      localStorage.removeItem("filter");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate(productFilter)) {
+      localStorage.setItem("filter", JSON.stringify(productFilter));
       setProductFilter({
         ...productFilter,
         query: "",
         number: "",
       });
-      alert("Fields Must Not Be Empty");
-    }
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate(productFilter)) {
-      localStorage.setItem("filter", JSON.stringify(productFilter));
+    } else {
+      localStorage.removeItem("filter");
       setProductFilter({
         ...productFilter,
         query: "",
@@ -88,7 +68,7 @@ const Dashboard = () => {
         </div>
         <form className="form">
           <div className="form-control">
-            <label htmlFor="query">Query : </label>
+            <label htmlFor="query">Food Item : </label>
             <input
               type="text"
               id="query"
@@ -98,7 +78,7 @@ const Dashboard = () => {
             />
           </div>
           <div className="form-control">
-            <label htmlFor="number">Number : </label>
+            <label htmlFor="number">No. Of results : </label>
             <input
               type="text"
               id="number"
